@@ -1,0 +1,72 @@
+{
+  "chainner": {
+    "loader": "spandrel 0.4.0",
+    "compatible": false,
+    "file": "PixelForge_4x_RRDB-S.pth",
+    "reason": "spandrel detects ESRGAN but assumes 32 growth channels; PixelForge RRDB-S uses 16 (size mismatch for model.1.sub.0.RDB1.conv1.0.weight: copying a param with shape torch.Size([16, 32, 3, 3]) from checkpoint, the shape in current model is torch.)"
+  },
+  "tiling": {
+    "hr": 1.613725221157074,
+    "normal": 5.558336743712426,
+    "tileable": 0.6846219425400099,
+    "n": 30,
+    "textures_with_visible_seam_normal": 24,
+    "textures_with_visible_seam_tileable": 2,
+    "figure_texture": "interlocking_concrete_pavers"
+  },
+  "alpha": {
+    "n": 20,
+    "edge_error_naive": 16.098644004978343,
+    "edge_error_bleed": 1.6030393526958193,
+    "reduction_pct": 90.04239517191574
+  },
+  "categories": [
+    {
+      "category": "brick",
+      "n": 8,
+      "lpips_gain_pct": 50.2121562883253
+    },
+    {
+      "category": "concrete",
+      "n": 7,
+      "lpips_gain_pct": 46.98297124994629
+    },
+    {
+      "category": "terrain",
+      "n": 6,
+      "lpips_gain_pct": 44.494565485212036
+    },
+    {
+      "category": "rock",
+      "n": 4,
+      "lpips_gain_pct": 43.83263075741379
+    },
+    {
+      "category": "sand",
+      "n": 6,
+      "lpips_gain_pct": 37.598763293491665
+    },
+    {
+      "category": "wood",
+      "n": 8,
+      "lpips_gain_pct": 36.15128031786226
+    },
+    {
+      "category": "other",
+      "n": 8,
+      "lpips_gain_pct": 34.74572398775034
+    }
+  ],
+  "throughput": {
+    "cuda": {
+      "textures": 60,
+      "seconds": 12.3,
+      "s_per_texture": 0.205
+    },
+    "cpu": {
+      "textures": 60,
+      "seconds": 32.7,
+      "s_per_texture": 0.545
+    }
+  }
+}

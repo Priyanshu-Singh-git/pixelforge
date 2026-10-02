@@ -1,0 +1,190 @@
+Metadata-Version: 2.4
+Name: pixelforge-engine
+Version: 1.1.0
+Summary: PixelForge Engine: x4 game texture upscaling for modders (batch, seamless tiles, alpha)
+Author: Priyanshu Singh
+License: Required Notice: Copyright (c) 2026 Priyanshu Singh (https://github.com/Priyanshu-Singh-git)
+        
+        For commercial use, contact the author for a commercial licence.
+        
+        # PolyForm Noncommercial License 1.0.0
+        
+        <https://polyformproject.org/licenses/noncommercial/1.0.0>
+        
+        ## Acceptance
+        
+        In order to get any license under these terms, you must agree to them as both strict obligations and conditions to all your licenses.
+        
+        ## Copyright License
+        
+        The licensor grants you a copyright license for the software to do everything you might do with the software that would otherwise infringe the licensor's copyright in it for any permitted purpose.  However, you may only distribute the software according to [Distribution License](#distribution-license) and make changes or new works based on the software according to [Changes and New Works License](#changes-and-new-works-license).
+        
+        ## Distribution License
+        
+        The licensor grants you an additional copyright license to distribute copies of the software.  Your license to distribute covers distributing the software with changes and new works permitted by [Changes and New Works License](#changes-and-new-works-license).
+        
+        ## Notices
+        
+        You must ensure that anyone who gets a copy of any part of the software from you also gets a copy of these terms or the URL for them above, as well as copies of any plain-text lines beginning with `Required Notice:` that the licensor provided with the software.  For example:
+        
+        > Required Notice: Copyright Yoyodyne, Inc. (http://example.com)
+        
+        ## Changes and New Works License
+        
+        The licensor grants you an additional copyright license to make changes and new works based on the software for any permitted purpose.
+        
+        ## Patent License
+        
+        The licensor grants you a patent license for the software that covers patent claims the licensor can license, or becomes able to license, that you would infringe by using the software.
+        
+        ## Noncommercial Purposes
+        
+        Any noncommercial purpose is a permitted purpose.
+        
+        ## Personal Uses
+        
+        Personal use for research, experiment, and testing for the benefit of public knowledge, personal study, private entertainment, hobby projects, amateur pursuits, or religious observance, without any anticipated commercial application, is use for a permitted purpose.
+        
+        ## Noncommercial Organizations
+        
+        Use by any charitable organization, educational institution, public research organization, public safety or health organization, environmental protection organization, or government institution is use for a permitted purpose regardless of the source of funding or obligations resulting from the funding.
+        
+        ## Fair Use
+        
+        You may have "fair use" rights for the software under the law. These terms do not limit them.
+        
+        ## No Other Rights
+        
+        These terms do not allow you to sublicense or transfer any of your licenses to anyone else, or prevent the licensor from granting licenses to anyone else.  These terms do not imply any other licenses.
+        
+        ## Patent Defense
+        
+        If you make any written claim that the software infringes or contributes to infringement of any patent, your patent license for the software granted under these terms ends immediately. If your company makes such a claim, your patent license ends immediately for work on behalf of your company.
+        
+        ## Violations
+        
+        The first time you are notified in writing that you have violated any of these terms, or done anything with the software not covered by your licenses, your licenses can nonetheless continue if you come into full compliance with these terms, and take practical steps to correct past violations, within 32 days of receiving notice.  Otherwise, all your licenses end immediately.
+        
+        ## No Liability
+        
+        ***As far as the law allows, the software comes as is, without any warranty or condition, and the licensor will not be liable to you for any damages arising out of these terms or the use or nature of the software, under any kind of legal claim.***
+        
+        ## Definitions
+        
+        The **licensor** is the individual or entity offering these terms, and the **software** is the software the licensor makes available under these terms.
+        
+        **You** refers to the individual or entity agreeing to these terms.
+        
+        **Your company** is any legal entity, sole proprietorship, or other kind of organization that you work for, plus all organizations that have control over, are under the control of, or are under common control with that organization.  **Control** means ownership of substantially all the assets of an entity, or the power to direct its management and policies by vote, contract, or otherwise.  Control can be direct or indirect.
+        
+        **Your licenses** are all the licenses granted to you for the software under these terms.
+        
+        **Use** means anything you do with the software requiring one of your licenses.
+        
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: torch>=2.0
+Requires-Dist: numpy
+Requires-Dist: opencv-python-headless
+Requires-Dist: pillow
+Dynamic: license-file
+
+# PixelForge
+
+**Old game textures in. 4× HD out.**
+
+PixelForge is a 4× super-resolution model trained on game textures. It turns low-res, compressed textures into
+clean HD versions, for HD texture mods, remasters and asset libraries. It runs in your browser, so your art
+never leaves your machine.
+
+**[▶ Try the live demo](https://priyanshu-singh-git.github.io/pixelforge/)** (before/after slider, upload your own, download the HD PNG)
+
+![PixelForge demo](assets/figures/demo_screenshot.png)
+
+## Results
+
+60 held-out test textures (never used for training or model selection), damaged the way old assets are
+(blur, downscaling, noise, JPEG compression), then upscaled 4× (128×128 → 512×512):
+
+| Method | Size | Pixel accuracy (PSNR ↑) | Looks like real HD (LPIPS ↓) | CPU time / texture |
+|---|---|---|---|---|
+| Bicubic resize | – | 29.31 dB | 0.707 | – |
+| Real-ESRGAN x4plus (official, trained on photos) | 16.7M params | 27.76 dB | 0.454 | 4.3 s |
+| **PixelForge GAN** (the demo model) | **1.1M params** | **28.76 dB** | **0.414** | **0.48 s** |
+| PixelForge L1 (fidelity-first) | 1.1M params | **29.73 dB** | 0.659 | 0.47 s |
+
+- **41% closer to the real HD look than bicubic** (LPIPS 0.707 → 0.414).
+- **Beats the official Real-ESRGAN on both metrics** on game textures, with **15× fewer parameters**, about 9× faster on CPU
+  and 5× faster on GPU.
+- In a laptop browser: about **2.3 s** per 128→512 texture (ONNX Runtime Web, no GPU).
+
+*Note: PSNR rewards "safe", slightly blurry guesses, so bicubic scores well on it. The GAN model trades a little pixel
+accuracy for realistic detail. The L1 model is the choice when exact fidelity matters.*
+
+![Zoomed comparison](assets/figures/zoom_comparison.png)
+
+*The textures with the **median** improvement over bicubic (very dark textures excluded), centre crops. Honest
+reading: PixelForge removes noise and JPEG blocks cleanly, but cannot recover fine detail that the tiny
+input no longer contains; Real-ESRGAN adds sharper but partly invented grain.*
+
+The cover/hero image (Slumped Mortar Brick) is a **strong** example (top 5 of 60 by improvement), not a typical one.
+
+## How it works
+
+1. **Data:** 858 CC0 textures from [Poly Haven](https://polyhaven.com/textures) (bricks, wood, metal, ground, fabric, stone),
+   split **by texture** into 738 train / 60 validation / 60 test.
+2. **Degradation pipeline:** each training patch is damaged on the fly (random blur, random-kernel 4× downscale,
+   Gaussian noise, JPEG q40–95), a simplified version of Real-ESRGAN's pipeline, so the model learns to undo it.
+3. **Generator:** a compact ESRGAN **RRDB** network (6 residual-in-residual dense blocks, 32 features, 1.1M params).
+4. **Training (RTX 3050 laptop GPU):**
+   - L1 stage: 15k iterations, 32 min.
+   - GAN stage: VGG19 perceptual loss + U-Net discriminator with spectral norm + generator EMA (Real-ESRGAN recipe).
+     Planned for 6k iterations, **stopped at 4k** when validation LPIPS plateaued (0.4062 → 0.4061).
+5. **Deployment:** exported to ONNX (4.5 MB), run in the browser with tiling. Verified against PyTorch: max difference
+   1/255 per pixel on every sample, and no visible tile seams on a tiled 300×300 upload.
+
+### For engineers: what the ablations showed
+
+- **Architecture:** the 7× smaller **SRVGG-S** (0.16M) comes within 0.07 dB PSNR of RRDB-S and is slightly *better* on LPIPS
+  (0.636 vs 0.659), at 15 ms vs 39 ms on GPU and 36 ms vs 465 ms on CPU. It's the natural candidate for a real-time version.
+- **L1 vs GAN:** the GAN stage cuts LPIPS 0.659 → 0.414 at a cost of 0.97 dB PSNR (fidelity vs realism trade-off).
+- **Domain matters:** a 1.1M model trained on game textures beats the 16.7M photo-trained Real-ESRGAN on this test set.
+- Full tables (both degradation settings, SSIM, GPU/CPU timings): **[eval/results.md](eval/results.md)**.
+
+Limitations: single run per model; synthetic degradations; pixel-art sprites, alpha channels and normal maps
+not yet handled or evaluated.
+
+## Run it yourself
+
+```bash
+pip install -r requirements-dev.txt
+python train/download_data.py                 # 858 CC0 textures + split manifest
+bash train/run_all.sh                         # L1 RRDB-S, L1 SRVGG-S, GAN RRDB-S (GPU)
+# official Real-ESRGAN baselines (BSD-3): put RealESRGAN_x4plus.pth / realesr-general-x4v3.pth in models/pretrained/
+python eval/evaluate.py                       # test-set metrics -> eval/results.jsonl
+python eval/make_figures.py                   # figures + eval/results.md
+python deploy/export_web.py --model rrdb_s_gan  # ONNX + browser demo in docs/ (parity-checked)
+pytest -q tests
+```
+
+| Path | What |
+|---|---|
+| `src/pixelforge/` | degradation pipeline, RRDBNet / SRVGGNetCompact / U-Net discriminator, data, metrics |
+| `train/` | data download, trainer (L1 and GAN stages) |
+| `eval/` | evaluation, figures, results |
+| `docs/` | browser demo (ONNX Runtime Web), served by GitHub Pages |
+| `presentation/` | deck builder (`deck.pptx`, slide PNGs, PDF) |
+
+## Licence and data
+
+Code and trained weights: [PolyForm Noncommercial 1.0.0](LICENSE). Free for modding, learning and personal use; for
+commercial use (studios, paid remasters), contact me for a commercial licence.
+
+Training data: Poly Haven textures, CC0 (public domain). Baselines: Real-ESRGAN weights (BSD-3-Clause), used for comparison only.
+Upscaling a game's own textures for a mod is up to the game's terms; check them before redistributing.
+
+---
+
+**Need your asset library or mod pack upscaled, or a model trained on your art style?** Send me 10 textures and I'll
+send them back in HD. Built by **Priyanshu Singh**, freelance AI / ML engineer · [GitHub](https://github.com/Priyanshu-Singh-git)

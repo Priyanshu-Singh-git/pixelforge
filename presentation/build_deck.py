@@ -79,7 +79,7 @@ def main():
         f"{l1['psnr'] - mine['psnr']:.2f} dB PSNR, the classic fidelity vs realism trade-off.",
         f"Versus Real-ESRGAN x4plus (trained on photos): LPIPS {mine['lpips']:.3f} vs {ref['lpips']:.3f}, PSNR "
         f"{mine['psnr']:.2f} vs {ref['psnr']:.2f} dB, with {size_ratio}× fewer parameters.",
-        "Single training run per model; synthetic degradations; pixel art and alpha channels not yet evaluated.",
+        "Single training run per model; synthetic degradations; pixel-art sprites and normal maps not yet handled.",
     ]
     zoom = Image.open(FIG / "zoom_comparison.png")
     zoom.crop((0, 0, zoom.width, zoom.height // 3)).save(FIG / "zoom_row.png")

@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pixelforge-engine"
+version = "1.1.0"
+description = "PixelForge Engine: x4 game texture upscaling for modders (batch, seamless tiles, alpha)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [{ name = "Priyanshu Singh" }]
+dependencies = ["torch>=2.0", "numpy", "opencv-python-headless", "pillow"]
+
+[project.scripts]
+pixelforge = "pixelforge.toolkit:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+pixelforge = ["weights/*.pt"]

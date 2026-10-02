@@ -8,3 +8,4 @@ presentation/node_modules/
 presentation/deck_data.json
 human_value_report/
 train/runs_all.log
+!src/pixelforge/weights/*.pt

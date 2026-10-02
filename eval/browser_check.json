@@ -44,5 +44,40 @@
     "max_abs_diff": 2,
     "status": "300\u00d7300 \u2192 1200\u00d71200 in 14.6 s, in your browser"
   },
-  "console_errors": []
+  "console_errors": [],
+  "engine": {
+    "seamless": {
+      "mean_abs_diff_vs_python": 0.0024897257486979165,
+      "p99": 0.0,
+      "seam_browser": 0.5085196495056152,
+      "seam_python_tileable": 0.5088675022125244,
+      "seam_python_normal": 5.50804591178894
+    },
+    "alpha": {
+      "output_mode_rgba": true,
+      "corner_alpha": 0,
+      "centre_alpha": 255,
+      "opaque_fraction": 0.2499728732638889,
+      "expected_fraction": 0.25
+    },
+    "batch": {
+      "files_in": 3,
+      "files_in_zip": 3,
+      "sizes": [
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          512
+        ]
+      ]
+    },
+    "console_errors": []
+  }
 }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PixelForge · 4× game texture upscaler</title>
+<title>PixelForge Engine · texture upscaling for modders</title>
 <meta name="description" content="Old game textures in, 4× HD out. A super-resolution model trained on game textures, running in your browser.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect x=%2210%22 y=%2210%22 width=%2235%22 height=%2235%22 fill=%22%2315803d%22/%3E%3Crect x=%2255%22 y=%2210%22 width=%2235%22 height=%2235%22 fill=%22%2339ff14%22/%3E%3Crect x=%2210%22 y=%2255%22 width=%2235%22 height=%2235%22 fill=%22%2339ff14%22/%3E%3Crect x=%2255%22 y=%2255%22 width=%2235%22 height=%2235%22 fill=%22%2316a34a%22/%3E%3C/svg%3E">
 <style>
@@ -31,6 +31,8 @@
   .thumb[aria-pressed="true"] { border-color:var(--orange); }
   .upload { display:block; border:1.5px dashed var(--orange); border-radius:10px; padding:12px; text-align:center; cursor:pointer; font-weight:600; color:var(--orange); background:#fff; }
   .upload input { display:none; }
+  .toggle { display:flex; gap:8px; align-items:center; margin-top:12px; font-weight:600; font-size:14px; cursor:pointer; }
+  .toggle input { width:18px; height:18px; accent-color: var(--orange); }
   .note { font-size:13px; color:var(--muted); margin-top:10px; }
   .seg { display:flex; gap:6px; flex-wrap:wrap; margin:0 0 12px; }
   .seg button { border:1.5px solid var(--border); background:#fff; border-radius:999px; padding:5px 12px; font:600 13px inherit; cursor:pointer; color:var(--ink2); }
@@ -65,17 +67,18 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="kicker">AI for game artists and modders</div>
-  <h1>PixelForge</h1>
+  <div class="kicker">Open upscaling engine for game modders</div>
+  <h1>PixelForge Engine</h1>
   <p class="usp">Old game textures in. <span>4× HD out.</span></p>
-  <div class="chips"><span class="chip">4× upscaling</span><span class="chip">Trained on game textures</span><span class="chip">Runs in your browser</span></div>
+  <div class="chips"><span class="chip">4× upscaling</span><span class="chip">Seamless tiles</span><span class="chip">Transparency kept</span><span class="chip">Batch + ZIP</span><span class="chip">Runs in your browser</span></div>
 
   <div class="grid">
     <div class="panel">
       <label class="h">1 · Pick a low-res texture</label>
       <div class="thumbs" id="thumbs"></div>
-      <label class="upload">…or upload your own<input id="file" type="file" accept="image/*"></label>
-      <p class="note">Works best on textures, tiles and painted art. Pixel-art sprites need a different model. Large images are processed in tiles. 🔒 Your image never leaves your device.</p>
+      <label class="upload">…or upload your own (one or many)<input id="file" type="file" accept="image/*" multiple></label>
+      <label class="toggle"><input id="tileable" type="checkbox"> Seamless / tileable texture</label>
+      <p class="note">Works best on textures, tiles and painted art (not pixel-art sprites). Transparent PNGs keep their alpha. Thousands of files? Use the <a href="https://github.com/Priyanshu-Singh-git/pixelforge#use-the-engine">command-line engine</a>. Large images are processed in tiles. 🔒 Your image never leaves your device.</p>
     </div>
     <div class="panel">
       <div class="seg" id="seg">
@@ -116,6 +119,7 @@
     Need your asset library or mod pack upscaled, or a model trained on your art style? Get in touch. · Training textures: Poly Haven (CC0).</footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/ort.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
