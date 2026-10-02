@@ -1,0 +1,10 @@
+data/
+models/pretrained/
+.cache/
+__pycache__/
+*.pyc
+.pytest_cache/
+presentation/node_modules/
+presentation/deck_data.json
+human_value_report/
+train/runs_all.log

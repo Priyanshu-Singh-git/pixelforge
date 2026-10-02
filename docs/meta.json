@@ -1,0 +1,82 @@
+{
+  "model": "pixelforge_rrdb_s_gan.onnx",
+  "params_m": 1.118755,
+  "samples": [
+    {
+      "slug": "slumped_mortar_brick",
+      "name": "Slumped Mortar Brick",
+      "lr": "samples/slumped_mortar_brick_lr.png",
+      "hr": "samples/slumped_mortar_brick_hr.jpg"
+    },
+    {
+      "slug": "aerial_rocks_02",
+      "name": "Aerial Rocks 02",
+      "lr": "samples/aerial_rocks_02_lr.png",
+      "hr": "samples/aerial_rocks_02_hr.jpg"
+    },
+    {
+      "slug": "bark_bluegum",
+      "name": "Bark Blue gum",
+      "lr": "samples/bark_bluegum_lr.png",
+      "hr": "samples/bark_bluegum_hr.jpg"
+    },
+    {
+      "slug": "brick_pavement_03",
+      "name": "Brick Pavement 03",
+      "lr": "samples/brick_pavement_03_lr.png",
+      "hr": "samples/brick_pavement_03_hr.jpg"
+    },
+    {
+      "slug": "brushed_concrete_2",
+      "name": "Brushed Concrete 2",
+      "lr": "samples/brushed_concrete_2_lr.png",
+      "hr": "samples/brushed_concrete_2_hr.jpg"
+    },
+    {
+      "slug": "clay_floor_001",
+      "name": "Clay Floor 001",
+      "lr": "samples/clay_floor_001_lr.png",
+      "hr": "samples/clay_floor_001_hr.jpg"
+    }
+  ],
+  "stats": {
+    "n": 60,
+    "rows": [
+      {
+        "method": "Bicubic",
+        "psnr": 29.314200862420233,
+        "lpips": 0.7066198935111364,
+        "size": "\u2013",
+        "mine": false
+      },
+      {
+        "method": "Real-ESRGAN x4plus (pretrained)",
+        "psnr": 27.76216214710878,
+        "lpips": 0.45378951616585256,
+        "size": "16.7M params",
+        "mine": false
+      },
+      {
+        "method": "Real-ESRGAN general-v3 (pretrained)",
+        "psnr": 28.93173399502627,
+        "lpips": 0.5473481636494398,
+        "size": "1.2M params",
+        "mine": false
+      },
+      {
+        "method": "PixelForge RRDB-S, L1 \u2605",
+        "psnr": 29.727881915547837,
+        "lpips": 0.6593761220574379,
+        "size": "1.1M params",
+        "mine": true
+      },
+      {
+        "method": "PixelForge RRDB-S, GAN \u2605",
+        "psnr": 28.76266735759983,
+        "lpips": 0.4142803738514582,
+        "size": "1.1M params",
+        "mine": true
+      }
+    ]
+  }
+}

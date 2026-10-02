@@ -1,0 +1,8 @@
+-r requirements.txt
+matplotlib==3.9.4
+pillow==10.4.0
+pytest==8.3.3
+onnx==1.17.0
+onnxruntime==1.19.2
+playwright==1.48.0
+qrcode==7.4.2

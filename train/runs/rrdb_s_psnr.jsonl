@@ -1,0 +1,8 @@
+{"it": 2000, "val_psnr": 28.73964960365904, "val_lpips": null, "minutes": 4.359897026666666}
+{"it": 4000, "val_psnr": 28.86026413474678, "val_lpips": null, "minutes": 8.40444243}
+{"it": 6000, "val_psnr": 28.916224666621204, "val_lpips": null, "minutes": 12.394791398333334}
+{"it": 8000, "val_psnr": 28.945839965139267, "val_lpips": null, "minutes": 16.469600295}
+{"it": 10000, "val_psnr": 28.96772633359794, "val_lpips": null, "minutes": 20.537005996666664}
+{"it": 12000, "val_psnr": 28.98009763222944, "val_lpips": null, "minutes": 24.6140987}
+{"it": 14000, "val_psnr": 28.987600314505748, "val_lpips": null, "minutes": 29.18209359}
+{"it": 15000, "val_psnr": 28.987992079056045, "val_lpips": null, "minutes": 31.532608416666665}

@@ -1,0 +1,48 @@
+{
+  "samples": [
+    {
+      "name": "Slumped Mortar Brick",
+      "mean_abs_diff": 3.3060709635416664e-05,
+      "max_abs_diff": 1,
+      "ms": 2288.0999999046326
+    },
+    {
+      "name": "Aerial Rocks 02",
+      "mean_abs_diff": 2.7974446614583332e-05,
+      "max_abs_diff": 1,
+      "ms": 2381.0999999046326
+    },
+    {
+      "name": "Bark Blue gum",
+      "mean_abs_diff": 1.1444091796875e-05,
+      "max_abs_diff": 1,
+      "ms": 2261
+    },
+    {
+      "name": "Brick Pavement 03",
+      "mean_abs_diff": 2.6702880859375e-05,
+      "max_abs_diff": 1,
+      "ms": 2290.300000190735
+    },
+    {
+      "name": "Brushed Concrete 2",
+      "mean_abs_diff": 2.7974446614583332e-05,
+      "max_abs_diff": 1,
+      "ms": 2267.800000190735
+    },
+    {
+      "name": "Clay Floor 001",
+      "mean_abs_diff": 1.52587890625e-05,
+      "max_abs_diff": 1,
+      "ms": 2088.4000000953674
+    }
+  ],
+  "tiled": {
+    "input": "300x300",
+    "mean_abs_diff": 0.005740277777777778,
+    "p99_abs_diff": 0.0,
+    "max_abs_diff": 2,
+    "status": "300\u00d7300 \u2192 1200\u00d71200 in 14.6 s, in your browser"
+  },
+  "console_errors": []
+}
