@@ -79,6 +79,8 @@ def main():
     ap.add_argument("--iters", type=int, default=20000)
     ap.add_argument("--bs", type=int, default=16)
     ap.add_argument("--hr", type=int, default=128)
+    ap.add_argument("--scale", type=int, default=4)
+    ap.add_argument("--degrade", default="real", choices=["real", "bicubic", "frame"])
     ap.add_argument("--lr", type=float, default=None)
     ap.add_argument("--val-every", type=int, default=2000)
     ap.add_argument("--workers", type=int, default=6)
@@ -88,6 +90,8 @@ def main():
     torch.manual_seed(args.seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     cfg = dict(arch=args.arch, nf=args.nf, nb=args.nb, gc=args.gc, nconv=args.nconv)
+    if args.scale != 4:
+        cfg["scale"] = args.scale
     G = build_generator(**cfg).to(device)
     if args.init:
         G.load_state_dict(torch.load(args.init, map_location="cpu", weights_only=False)["ema"])
@@ -103,10 +107,10 @@ def main():
         percep = VGGPerceptual().to(device)
     ema_decay = 0.999
 
-    loader = DataLoader(TrainPatches(hr_size=args.hr, length=args.iters * args.bs, seed=args.seed),
+    loader = DataLoader(TrainPatches(hr_size=args.hr, scale=args.scale, mode=args.degrade, length=args.iters * args.bs, seed=args.seed),
                         batch_size=args.bs, num_workers=args.workers, pin_memory=True, drop_last=True,
                         persistent_workers=True)
-    val = build_eval_set("val", "real")
+    val = build_eval_set("val", args.degrade, scale=args.scale)
     log = ROOT / "train" / "runs" / f"{args.name}.jsonl"
     log.parent.mkdir(parents=True, exist_ok=True)
     out = ROOT / "models" / f"{args.name}.pt"

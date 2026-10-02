@@ -26,6 +26,7 @@ from PIL import Image
 from .models import build_generator
 
 DEFAULT_MODEL = Path(__file__).resolve().parent / "weights" / "pixelforge_rrdb_s_gan.pt"
+FAST_MODEL = Path(__file__).resolve().parent / "weights" / "pixelforge_fast_srvgg.pt"  # no-GPU preset
 EXTS = {".png", ".jpg", ".jpeg", ".tga", ".bmp", ".webp", ".dds", ".tif", ".tiff"}
 SCALE = 4
 
@@ -103,7 +104,7 @@ def upscale_image(net, im: Image.Image, device, tileable=False, tile=192, bleed=
 
 def cmd_upscale(args):
     device = torch.device(args.device if args.device != "auto" else ("cuda" if torch.cuda.is_available() else "cpu"))
-    net = load_model(args.model, device)
+    net = load_model(FAST_MODEL if args.fast else args.model, device)
     src, dst = Path(args.input), Path(args.output)
     files = sorted(p for p in src.rglob("*") if p.suffix.lower() in EXTS) if src.is_dir() else [src]
     report = {"done": 0, "skipped": 0, "failed": [], "seconds": 0.0, "device": str(device), "tileable": args.tileable}
@@ -157,6 +158,7 @@ def main(argv=None):
     up.add_argument("--tileable", action="store_true", help="keep seamless textures seamless (wrap-around padding)")
     up.add_argument("--tile", type=int, default=192, help="tile size in input pixels (lower = less memory)")
     up.add_argument("--device", default="auto")
+    up.add_argument("--fast", action="store_true", help="small model for laptops without a GPU (~13x faster on CPU, a bit softer)")
     up.add_argument("--overwrite", action="store_true")
     up.add_argument("--quiet", action="store_true")
     ex = sub.add_parser("export", help="write ESRGAN-format weights (+ model card) for other tools")

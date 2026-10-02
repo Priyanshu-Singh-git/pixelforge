@@ -11,3 +11,4 @@ train/runs_all.log
 !src/pixelforge/weights/*.pt
 build/
 *.egg-info/
+wip/

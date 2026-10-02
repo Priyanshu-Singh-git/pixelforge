@@ -10,6 +10,7 @@ import cv2
 import numpy as np
 
 INTERP = [cv2.INTER_AREA, cv2.INTER_LINEAR, cv2.INTER_CUBIC]
+INTER_FRAME = [cv2.INTER_AREA, cv2.INTER_LINEAR, cv2.INTER_NEAREST]
 
 
 def degrade(hr: np.ndarray, rng: np.random.Generator, scale: int = 4, mode: str = "real") -> np.ndarray:
@@ -18,6 +19,12 @@ def degrade(hr: np.ndarray, rng: np.random.Generator, scale: int = 4, mode: str 
     size = (w // scale, h // scale)
     if mode == "bicubic":
         return cv2.resize(hr, size, interpolation=cv2.INTER_CUBIC)
+    if mode == "frame":  # a game rendered at lower resolution: clean but soft/aliased, no noise or JPEG
+        img = hr.astype(np.float32)
+        if rng.random() < 0.3:
+            img = cv2.GaussianBlur(img, (0, 0), sigmaX=rng.uniform(0.2, 0.8))
+        img = cv2.resize(img, size, interpolation=INTER_FRAME[rng.integers(len(INTER_FRAME))])
+        return np.clip(img, 0, 255).round().astype(np.uint8)
     img = hr.astype(np.float32)
     if rng.random() < 0.8:  # isotropic / anisotropic Gaussian blur
         sx = rng.uniform(0.2, 2.0)

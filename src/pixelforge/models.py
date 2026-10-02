@@ -123,7 +123,7 @@ def build_generator(arch: str, **kw) -> nn.Module:
     if arch == "rrdb":
         return RRDBNet(num_feat=kw.get("nf", 64), num_block=kw.get("nb", 23), num_grow_ch=kw.get("gc", 32))
     if arch == "srvgg":
-        return SRVGGNetCompact(num_feat=kw.get("nf", 64), num_conv=kw.get("nconv", 16))
+        return SRVGGNetCompact(num_feat=kw.get("nf", 64), num_conv=kw.get("nconv", 16), upscale=kw.get("scale", 4))
     raise ValueError(arch)
 
 

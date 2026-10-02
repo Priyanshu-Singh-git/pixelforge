@@ -58,7 +58,7 @@ class TrainPatches(Dataset):
 def build_eval_set(split: str, mode: str, hr_size=512, scale=4) -> dict:
     """Centre HR crop per texture + a degradation seeded by the texture name (fixed forever).
     Cached to data/eval_<split>_<mode>.npz so every model sees identical inputs."""
-    cache = ROOT / "data" / f"eval_{split}_{mode}.npz"
+    cache = ROOT / "data" / (f"eval_{split}_{mode}.npz" if scale == 4 else f"eval_{split}_{mode}_x{scale}.npz")
     if cache.exists():
         d = np.load(cache, allow_pickle=True)
         return {k: d[k] for k in d.files}

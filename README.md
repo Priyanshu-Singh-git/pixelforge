@@ -23,6 +23,7 @@ pip install git+https://github.com/Priyanshu-Singh-git/pixelforge
 pixelforge upscale ./textures ./textures_hd            # folder in -> folder out, sub-folders and names kept
 pixelforge upscale ./tiles ./tiles_hd --tileable       # seamless textures stay seamless
 pixelforge export PixelForge_4x.pth                    # ESRGAN-format weights + model card
+pixelforge upscale ./textures ./textures_hd --fast     # laptop without a GPU: ~13x faster on CPU, a bit softer
 ```
 
 Weights and an ONNX model are also on the [releases page](https://github.com/Priyanshu-Singh-git/pixelforge/releases).
@@ -32,6 +33,7 @@ Weights and an ONNX model are also on the [releases page](https://github.com/Pri
 | Seamless tiles (30 test textures repeated 2×2) | 24 of 30 show a visible seam | **2 of 30** |
 | Transparent edges (20 decals with junk colour under alpha) | coloured halo, edge error 16.1 | **1.6 (−90%)** |
 | Batch speed (60 textures, 128→512) | – | **0.21 s each on GPU (RTX 3050), 0.55 s on CPU** |
+| No-GPU preset `--fast` (0.16M params) | – | **36 ms per texture on 4 CPU threads** (vs 465 ms default; LPIPS 0.636 vs 0.414) |
 
 ![Seamless vs normal](assets/figures/tileable_comparison.png)
 *Where four copies of a tiling texture meet: normal upscale (left) shows a seam cross; `--tileable` (right) doesn't.*

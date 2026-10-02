@@ -68,3 +68,10 @@ def test_export_roundtrip(tmp_path):
     assert (tmp_path / "pf.md").exists()
     net = load_model(tmp_path / "pf.pth", CPU)
     assert net(torch.rand(1, 3, 8, 8)).shape == (1, 3, 32, 32)
+
+
+def test_fast_preset_runs_on_cpu(tmp_path):
+    src = tmp_path / "in"; src.mkdir()
+    Image.fromarray(np.full((16, 16, 3), 120, np.uint8)).save(src / "t.png")
+    rep = main(["upscale", str(src), str(tmp_path / "out"), "--fast", "--device", "cpu", "--quiet"])
+    assert rep["done"] == 1 and Image.open(tmp_path / "out" / "t.png").size == (64, 64)
