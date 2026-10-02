@@ -179,7 +179,7 @@ pres.addSection({ title: "Results" });
 
 // ================= 6. gallery =================
 {
-  const s = content("Results", "Real results", "Representative, not cherry-picked.");
+  const s = content("Results", "Real results", "Real results on textures it never saw.");
   s.addText("Median-improvement textures, different materials, zoomed. PixelForge clears noise and JPEG blocks; detail the tiny input no longer has can't be fully recovered.",
     { x: M, y: 1.65, w: 12.1, h: 0.4, fontSize: 14, color: C.text2, margin: 0, isTextBox: true });
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: M, y: 2.2, w: 12.13, h: 4.6, rectRadius: 0.12, fill: { color: "FFFFFF" }, line: { color: C.accent6, width: 1 } });
@@ -237,7 +237,7 @@ pres.addSection({ title: "Call to action" });
 // ================= 9. appendix =================
 pres.addSection({ title: "Appendix" });
 {
-  const s = content("Appendix", "Appendix · for engineers", "Benchmarked, not guessed.");
+  const s = content("Appendix", "Appendix · for engineers", "The numbers behind it.");
   s.addText(`Held-out test set: ${D.n_test} game textures, realistic degradation, ×4. PSNR/SSIM higher is better; LPIPS lower is better.`,
     { x: M, y: 1.65, w: 12.1, h: 0.4, fontSize: 13, color: C.text2, margin: 0, isTextBox: true });
   const hdr = ["Method", "Params", "PSNR ↑", "SSIM ↑", "LPIPS ↓", "GPU ms"].map((t) => ({ text: t, options: { bold: true, color: C.accent1, fill: { color: C.background2 } } }));
