@@ -1,22 +1,23 @@
-# Upwork portfolio entry: PixelForge
+# Upwork portfolio entry: PixelForge Engine
 
-**Project title** (54/70)
+**Project title** (55/70)
 ```
-AI Game Texture Upscaler: 4x HD for Mods and Remasters
-```
-
-**Your role** (71/100)
-```
-AI / ML Engineer: model training, GAN, benchmarking, browser deployment
+PixelForge Engine: AI Texture Upscaler for Game Modders
 ```
 
-**Project description** (465/600)
+**Your role** (68/100)
 ```
-Goal: give old, low-res game textures a clean 4x HD version for mods and remasters. Solution: I trained an ESRGAN-style super-resolution model from scratch in PyTorch on 738 CC0 game textures, with a realistic damage pipeline and a GAN stage, and shipped it as a free in-browser tool. Impact: 41% closer to the real HD look than bicubic, beating the official Real-ESRGAN with 15x fewer parameters and 9x faster on CPU. Demo: priyanshu-singh-git.github.io/pixelforge
+AI / ML Engineer: GAN training, tool engineering, browser deployment
 ```
 
-**Skills (5):** Deep Learning · PyTorch · Computer Vision · Generative AI (or GAN) · Game Development (or Image Processing)
+**Project description** (442/600)
+```
+Goal: let modders turn old, low-res game textures into 4x HD without redrawing them. Solution: I trained a compact ESRGAN-style GAN from scratch on 738 CC0 game textures and built it into an engine: pip-installable CLI and in-browser batch tool, with seamless-tile mode and clean transparency. Impact: 41% closer to real HD than bicubic, 15x smaller than Real-ESRGAN, tiling seams 24/30 to 2/30. Demo: priyanshu-singh-git.github.io/pixelforge
+```
 
-**Images to upload, in order:** `presentation/slides/slide_01.png` (cover/thumbnail), then `slide_02.png` … `slide_09.png`
+**Skills (5):** Deep Learning · PyTorch · Computer Vision · Generative AI (or GAN) · Game Development
 
-**Links:** live demo https://priyanshu-singh-git.github.io/pixelforge/ · code https://github.com/Priyanshu-Singh-git/pixelforge · video (add after recording)
+**Images to upload, in order:** `presentation/upwork/pixelforge_engine_promo.png` (hook), then `presentation/slides/slide_01.png` … `slide_10.png`
+(or use `slide_01.png` as the thumbnail and the promo as image 2)
+
+**Links:** live engine https://priyanshu-singh-git.github.io/pixelforge/ · code + CLI https://github.com/Priyanshu-Singh-git/pixelforge · release https://github.com/Priyanshu-Singh-git/pixelforge/releases/tag/v1.1.0

@@ -81,16 +81,24 @@ def main():
         f"{mine['psnr']:.2f} vs {ref['psnr']:.2f} dB, with {size_ratio}× fewer parameters.",
         "Single training run per model; synthetic degradations; pixel-art sprites and normal maps not yet handled.",
     ]
+    tk = json.loads((ROOT / "eval" / "toolkit_results.json").read_text())
+    engine = {
+        "seam_normal": tk["tiling"]["textures_with_visible_seam_normal"], "seam_tileable": tk["tiling"]["textures_with_visible_seam_tileable"],
+        "seam_n": tk["tiling"]["n"], "alpha_before": tk["alpha"]["edge_error_naive"], "alpha_after": tk["alpha"]["edge_error_bleed"],
+        "alpha_cut": round(tk["alpha"]["reduction_pct"]), "gpu_s": tk["throughput"]["cuda"]["s_per_texture"],
+        "cpu_s": tk["throughput"]["cpu"]["s_per_texture"], "batch_n": tk["throughput"]["cpu"]["textures"],
+    }
     zoom = Image.open(FIG / "zoom_comparison.png")
     zoom.crop((0, 0, zoom.width, zoom.height // 3)).save(FIG / "zoom_row.png")
     qr(DEMO)
     data = {
         "demo_url": DEMO, "repo_url": REPO, "video_url": args.video_url, "stats": stats, "table": table,
-        "findings": findings, "n_test": mine["n"], "n_train": n_train, "params_m": mine["params_m"],
+        "findings": findings, "engine": engine, "n_test": mine["n"], "n_train": n_train, "params_m": mine["params_m"],
         "ref_params_m": ref["params_m"], "browser_s": browser_s,
         "assets": {"hero": rounded(FIG / "hero_grid.png", 0.035), "shot": rounded(FIG / "demo_screenshot.png", 0.03),
                    "zoom": rounded(FIG / "zoom_comparison.png", 0.03), "zoom_row": rounded(FIG / "zoom_row.png", 0.08),
-                   "qr": str(OUT / "qr.png")},
+                   "qr": str(OUT / "qr.png"), "tileable": rounded(FIG / "tileable_comparison.png", 0.04),
+                   "alpha": rounded(FIG / "alpha_comparison.png", 0.04)},
     }
     (OUT / "deck_data.json").write_text(json.dumps(data, indent=2))
     subprocess.run(["node", "build_pptx.js"], check=True, cwd=OUT)

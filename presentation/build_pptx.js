@@ -28,7 +28,7 @@ async function applyTheme(file, theme) {
 
 const pres = new pptxgen();
 pres.layout = "LAYOUT_WIDE";
-pres.title = "PixelForge: 4x game texture upscaler";
+pres.title = "PixelForge Engine: texture upscaling for modders";
 pres.author = "Priyanshu Singh";
 pres.theme = { headFontFace: THEME.headFontFace, bodyFontFace: THEME.bodyFontFace };
 const C = pres.SchemeColor;
@@ -49,7 +49,7 @@ pres.defineSlideMaster({
         bold: true, color: C.accent1, charSpacing: 2, margin: 0, valign: "middle" }, text: "" } },
     { placeholder: { options: { name: "title", type: "title", x: M, y: 0.82, w: 12.1, h: 0.95, fontFace: SCRIPT, fontSize: 30,
         bold: true, color: C.text1, margin: 0, valign: "top", align: "left" }, text: "" } },
-    { text: { text: "PixelForge · 4× game texture upscaler", options: { x: M, y: 7.0, w: 8, h: 0.3, fontSize: 11, color: C.accent5, margin: 0 } } },
+    { text: { text: "PixelForge Engine · texture upscaling for modders", options: { x: M, y: 7.0, w: 8, h: 0.3, fontSize: 11, color: C.accent5, margin: 0 } } },
   ],
   slideNumber: { x: 12.1, y: 7.0, w: 0.63, h: 0.3, fontSize: 11, color: C.accent5, align: "right" },
 });
@@ -79,18 +79,18 @@ pres.addSection({ title: "Hook" });
   s.addImage({ ...fit(D.assets.hero, ix, iy, box.w, box.h), objectName: "Comparison grid",
     altText: "Three game textures, before (bicubic) and after PixelForge 4x" });
   const tw = ix - M - 0.3;
-  s.addText("AI FOR GAME ARTISTS & MODDERS", { x: M, y: 1.2, w: tw, h: 0.45, fontFace: SANS, fontSize: 18, bold: true,
+  s.addText("UPSCALING ENGINE FOR MODDERS", { x: M, y: 0.95, w: tw, h: 0.4, fontFace: SANS, fontSize: 16, bold: true,
     color: C.accent1, charSpacing: 3, margin: 0, isTextBox: true });
-  s.addText("PixelForge", { x: M, y: 1.75, w: tw, h: 1.15, fontFace: SCRIPT, fontSize: 66, bold: true, color: C.text1,
-    margin: 0, valign: "top", isTextBox: true, objectName: "Product name" });
+  s.addText([{ text: "PixelForge", options: { color: C.text1, breakLine: true } }, { text: "Engine", options: { color: C.accent1 } }],
+    { x: M, y: 1.4, w: tw, h: 2.25, fontFace: SCRIPT, fontSize: 56, bold: true, margin: 0, valign: "top", lineSpacingMultiple: 0.9, isTextBox: true, objectName: "Product name" });
   s.addText([{ text: "Old game textures in.", options: { color: C.text1, breakLine: true } },
              { text: "4× HD out.", options: { color: C.accent1 } }],
-    { x: M, y: 3.1, w: tw, h: 1.7, fontFace: SCRIPT, fontSize: 30, bold: true, margin: 0, valign: "top", isTextBox: true, objectName: "USP" });
+    { x: M, y: 3.8, w: tw, h: 1.3, fontFace: SCRIPT, fontSize: 26, bold: true, margin: 0, valign: "top", isTextBox: true, objectName: "USP" });
   let cx = M;
-  ["4× upscale", "Trained on game art", "Runs in browser"].forEach((t) => {
+  ["Seamless tiles", "Keeps alpha", "Batch whole packs"].forEach((t) => {
     const cw = 0.095 * t.length + 0.45;
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: cx, y: 5.0, w: cw, h: 0.55, rectRadius: 0.27, fill: { color: C.background2 }, line: { color: C.accent2, width: 2 } });
-    s.addText(t, { x: cx, y: 5.0, w: cw, h: 0.55, fontSize: 15, bold: true, color: C.text1, align: "center", valign: "middle", margin: 0, isTextBox: true });
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: cx, y: 5.35, w: cw, h: 0.55, rectRadius: 0.27, fill: { color: C.background2 }, line: { color: C.accent2, width: 2 } });
+    s.addText(t, { x: cx, y: 5.35, w: cw, h: 0.55, fontSize: 15, bold: true, color: C.text1, align: "center", valign: "middle", margin: 0, isTextBox: true });
     cx += cw + 0.12;
   });
   s.addNotes("0-8s: drag the before/after slider on an old texture. 'Same texture, 4x the detail.'");
@@ -129,7 +129,7 @@ pres.addSection({ title: "Solution" });
     altText: "PixelForge web app with a before/after slider" });
   const pts = [["Before/after slider", "Compare against bicubic, the original pixels, or the true HD texture."],
                ["Runs in your browser", "No upload, no server, no install. Your art never leaves your machine."],
-               ["Download the HD file", `Large images are processed in tiles; get a 4× PNG in seconds (${D.browser_s.toFixed(1)} s for a 512×512 result in a laptop browser).`]];
+               ["Batch + ZIP download", `Drop in many textures at once and get one ZIP back (${D.browser_s.toFixed(1)} s per 512×512 result in a laptop browser).`]];
   const x = M + box.w + 0.35, w = W - M - x;
   pts.forEach(([h, p], i) => {
     const y = 1.95 + i * 1.7;
@@ -139,6 +139,39 @@ pres.addSection({ title: "Solution" });
     s.addText(p, { x: x + 0.95, y: y + 0.65, w: w - 1.15, h: 0.72, fontSize: 13, color: C.text2, margin: 0, valign: "top", isTextBox: true });
   });
   s.addNotes("Live demo: pick a texture, drag the slider, toggle 'vs True HD', download the PNG.");
+}
+
+
+// ================= 3b. built for modders (engine) =================
+{
+  const E = D.engine;
+  const s = content("Solution", "Built for modders", "An engine you can drop into your mod pipeline.");
+  const rows = [
+    ["Seamless tiles", `${E.seam_normal} of ${E.seam_n} textures show a seam`, `${E.seam_tileable} of ${E.seam_n}`],
+    ["Transparent edges", `colour halo (edge error ${E.alpha_before.toFixed(1)})`, `${E.alpha_after.toFixed(1)}  (−${E.alpha_cut}%)`],
+    ["Whole texture packs", "one file at a time", `${E.gpu_s.toFixed(2)} s / texture GPU · ${E.cpu_s.toFixed(2)} s CPU`],
+  ];
+  const hdr = ["Feature", "Plain upscaling", "PixelForge Engine"].map((t) => ({ text: t, options: { bold: true, color: C.accent1, fill: { color: C.background2 } } }));
+  const body = rows.map((r) => r.map((t, j) => ({ text: t, options: { color: j === 2 ? C.text1 : C.text2, bold: j !== 1, fill: { color: C.background1 } } })));
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: M - 0.05, y: 1.85, w: 7.35, h: 2.0, rectRadius: 0.3, fill: { color: C.background1 }, line: { color: C.accent2, width: 2 } });
+  s.addTable([hdr, ...body], { x: M + 0.15, y: 2.0, w: 6.95, colW: [1.9, 2.55, 2.5], fontSize: 13, fontFace: SANS, border: { type: "none" }, rowH: 0.42, margin: 0.06, objectName: "Engine features" });
+  // CLI card
+  card(s, M, 4.1, 7.25, 2.75, "CLI card");
+  s.addText("Command line", { x: M + 0.3, y: 4.25, w: 6, h: 0.45, fontFace: SCRIPT, fontSize: 18, bold: true, color: C.text1, margin: 0, isTextBox: true });
+  s.addText([
+    { text: "pip install git+https://github.com/Priyanshu-Singh-git/pixelforge", options: { breakLine: true } },
+    { text: "pixelforge upscale ./textures ./textures_hd", options: { breakLine: true } },
+    { text: "pixelforge upscale ./tiles ./tiles_hd --tileable", options: { breakLine: true } },
+    { text: "pixelforge export PixelForge_4x.pth", options: {} },
+  ], { x: M + 0.3, y: 4.8, w: 6.7, h: 1.4, fontFace: "Consolas", fontSize: 12, color: C.text1, margin: 0, valign: "top", paraSpaceAfter: 4, isTextBox: true });
+  s.addText("Folder in, folder out · names and sub-folders kept · GPU or CPU · ONNX + ESRGAN-format weights", { x: M + 0.3, y: 6.25, w: 6.7, h: 0.45, fontSize: 12, color: C.accent5, margin: 0, isTextBox: true });
+  // proof images
+  const x = M + 7.6, w = W - M - x;
+  s.addImage({ ...fit(D.assets.tileable, x, 1.85, w, 2.35), objectName: "Seam comparison", altText: "Normal upscale shows a seam cross; tileable mode does not" });
+  s.addText("Tiling seam: normal (left) vs --tileable (right)", { x, y: 4.22, w, h: 0.3, fontSize: 11, color: C.accent5, align: "center", margin: 0, isTextBox: true });
+  s.addImage({ ...fit(D.assets.alpha, x, 4.6, w, 2.0), objectName: "Alpha comparison", altText: "Naive upscale shows a magenta halo; PixelForge stays clean" });
+  s.addText("Transparent decal: halo (left) vs clean edge (right)", { x, y: 6.62, w, h: 0.3, fontSize: 11, color: C.accent5, align: "center", margin: 0, isTextBox: true });
+  s.addNotes("For modders: batch whole packs, tiling textures stay seamless, transparent edges stay clean. All measured.");
 }
 
 // ================= 4. results in plain numbers =================
@@ -217,14 +250,14 @@ pres.addSection({ title: "Call to action" });
 {
   const s = pres.addSlide({ masterName: "COVER", sectionTitle: "Call to action" });
   s.addText("NEXT STEP", { x: M, y: 0.9, w: 6, h: 0.4, fontFace: SANS, fontSize: 14, bold: true, color: C.accent1, charSpacing: 2, margin: 0, isTextBox: true });
-  s.addText([{ text: "Send me 10 of your textures.", options: { color: C.text1, breakLine: true } },
-             { text: "I'll send them back in HD.", options: { color: C.accent1 } }],
+  s.addText([{ text: "Use the engine on your mod today,", options: { color: C.text1, breakLine: true } },
+             { text: "or send me 10 textures to try.", options: { color: C.accent1 } }],
     { x: M, y: 1.35, w: 12.1, h: 1.9, fontFace: SCRIPT, fontSize: 42, bold: true, margin: 0, valign: "top", isTextBox: true });
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: M, y: 3.55, w: 2.9, h: 2.9, rectRadius: 0.32, fill: { color: "FFFFFF" }, line: { color: C.accent2, width: 1.75 } });
   s.addImage({ path: D.assets.qr, x: M + 0.15, y: 3.7, w: 2.6, h: 2.6, objectName: "QR code", altText: "QR code to the live demo" });
   const links = [["Try the live demo", D.demo_url]];
   if (D.video_url) links.push(["Watch the walkthrough", D.video_url]);
-  links.push(["Code and full benchmark", D.repo_url]);
+  links.push(["Engine code, CLI and benchmark", D.repo_url]);
   const runs = [];
   links.forEach(([lab, url], i) => {
     runs.push({ text: lab, options: { bold: true, color: C.text1, breakLine: true } });
