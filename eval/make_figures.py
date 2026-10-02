@@ -23,6 +23,7 @@ from evaluate import classical, load_ours, load_pretrained, neural  # noqa: E402
 from pixelforge.data import build_eval_set, load_manifest  # noqa: E402
 
 FIG = ROOT / "assets" / "figures"
+COVER_SLUGS = ["red_brick_03", "hexagonal_concrete_paving", "rock_wall_06"]  # cover showcase (strong examples)
 INK, INK2, GRID, SURF = "#1f2937", "#4b5563", "#e5e7eb", "#ffffff"
 ORANGE, RED, SLATE = "#ea580c", "#b91c1c", "#94a3b8"
 plt.rcParams.update({"font.family": ["Segoe UI", "DejaVu Sans"], "font.size": 11, "axes.edgecolor": GRID,
@@ -151,7 +152,32 @@ def main():
     # cover hero = a strong (not typical) example, chosen explicitly and named in the README
     k = list(map(str, d["slug"])).index(args.hero)
     Image.fromarray(hero_split(d["lr"][k], best(d["lr"][k]))).save(FIG / "hero_split.png")
+    hero_grid(COVER_SLUGS, FIG / "hero_grid.png")
     print("figures:", sorted(p.name for p in FIG.glob("*.png")), "| picks:", [str(d["slug"][i]) for i in picks])
+
+
+
+def hero_grid(slugs, out_path, crop=256, tile=420):
+    """Cover grid: one column per texture; top row Before (bicubic), bottom row PixelForge 4x. Strong examples."""
+    d = build_eval_set("test", "real")
+    best = neural(load_ours("rrdb_s_gan"))
+    idx = {str(s): k for k, s in enumerate(d["slug"])}
+    gap = 14
+    canvas = Image.new("RGB", (len(slugs) * tile + (len(slugs) - 1) * gap, 2 * tile + gap), (255, 255, 255))
+    o = (512 - crop) // 2
+    for c, s in enumerate(slugs):
+        k = idx[s]
+        bic = cv2.resize(d["lr"][k], (512, 512), interpolation=cv2.INTER_CUBIC)[o:o + crop, o:o + crop]
+        sr = best(d["lr"][k])[o:o + crop, o:o + crop]
+        for r, (img, tag, colour) in enumerate(((bic, "Before", (20, 83, 45)), (sr, "PixelForge 4×", (21, 128, 61)))):
+            im = Image.fromarray(cv2.resize(img, (tile, tile), interpolation=cv2.INTER_LANCZOS4))
+            dr, f = ImageDraw.Draw(im), font(30)
+            w = dr.textlength(tag, font=f)
+            dr.rounded_rectangle([12, 12, 12 + w + 24, 58], 9, fill=(255, 255, 255) if r == 0 else colour)
+            dr.text((24, 15), tag, font=f, fill=colour if r == 0 else (255, 255, 255))
+            canvas.paste(im, (c * (tile + gap), r * (tile + gap)))
+    canvas.save(out_path)
+
 
 
 if __name__ == "__main__":

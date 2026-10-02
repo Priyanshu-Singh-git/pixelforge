@@ -11,7 +11,7 @@ import subprocess
 from pathlib import Path
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "presentation"
@@ -22,11 +22,24 @@ LABEL = {"rrdb_s_gan": "PixelForge RRDB-S, GAN (mine)", "rrdb_s_psnr": "PixelFor
          "srvgg_s_psnr": "PixelForge SRVGG-S, L1 (mine)"}
 
 
+def rounded(src: Path, radius_frac=0.045) -> str:
+    """Copy of an image with transparent rounded corners (curved boundaries on every deck image)."""
+    im = Image.open(src).convert("RGBA")
+    r = int(min(im.size) * radius_frac)
+    mask = Image.new("L", im.size, 0)
+    ImageDraw.Draw(mask).rounded_rectangle([0, 0, im.width - 1, im.height - 1], r, fill=255)
+    im.putalpha(mask)
+    dst = OUT / "rounded" / src.name
+    dst.parent.mkdir(exist_ok=True)
+    im.save(dst)
+    return str(dst)
+
+
 def qr(url):
     import qrcode
     q = qrcode.QRCode(border=2, box_size=12)
     q.add_data(url); q.make(fit=True)
-    q.make_image(fill_color="#1f2937", back_color="white").convert("RGB").save(OUT / "qr.png")
+    q.make_image(fill_color="#14532d", back_color="white").convert("RGB").save(OUT / "qr.png")
 
 
 def main():
@@ -47,7 +60,7 @@ def main():
     size_ratio = round(ref["params_m"] / mine["params_m"])
     stats = [
         [f"{lp_gain}%", "closer to the real HD look than bicubic", f"LPIPS perceptual distance, {mine['n']} unseen game textures"],
-        [f"{size_ratio}× smaller", f"than Real-ESRGAN ({mine['params_m']:.1f}M vs {ref['params_m']:.1f}M parameters)",
+        [f"{size_ratio}×", f"smaller than Real-ESRGAN ({mine['params_m']:.1f}M vs {ref['params_m']:.1f}M parameters)",
          f"LPIPS {mine['lpips']:.3f} vs {ref['lpips']:.3f} (lower is better)"],
         [f"{browser_s:.1f} s", "to upscale a texture 4× in a laptop browser", "128×128 → 512×512, no GPU, no upload"],
     ]
@@ -75,8 +88,8 @@ def main():
         "demo_url": DEMO, "repo_url": REPO, "video_url": args.video_url, "stats": stats, "table": table,
         "findings": findings, "n_test": mine["n"], "n_train": n_train, "params_m": mine["params_m"],
         "ref_params_m": ref["params_m"], "browser_s": browser_s,
-        "assets": {"hero": str(FIG / "hero_split.png"), "shot": str(FIG / "demo_screenshot.png"),
-                   "zoom": str(FIG / "zoom_comparison.png"), "zoom_row": str(FIG / "zoom_row.png"),
+        "assets": {"hero": rounded(FIG / "hero_grid.png", 0.035), "shot": rounded(FIG / "demo_screenshot.png", 0.03),
+                   "zoom": rounded(FIG / "zoom_comparison.png", 0.03), "zoom_row": rounded(FIG / "zoom_row.png", 0.08),
                    "qr": str(OUT / "qr.png")},
     }
     (OUT / "deck_data.json").write_text(json.dumps(data, indent=2))

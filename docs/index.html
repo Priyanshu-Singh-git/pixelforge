@@ -5,10 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PixelForge · 4× game texture upscaler</title>
 <meta name="description" content="Old game textures in, 4× HD out. A super-resolution model trained on game textures, running in your browser.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect x=%2210%22 y=%2210%22 width=%2235%22 height=%2235%22 fill=%22%23ea580c%22/%3E%3Crect x=%2255%22 y=%2210%22 width=%2235%22 height=%2235%22 fill=%22%23f59e0b%22/%3E%3Crect x=%2210%22 y=%2255%22 width=%2235%22 height=%2235%22 fill=%22%23f59e0b%22/%3E%3Crect x=%2255%22 y=%2255%22 width=%2235%22 height=%2235%22 fill=%22%23dc2626%22/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect x=%2210%22 y=%2210%22 width=%2235%22 height=%2235%22 fill=%22%2315803d%22/%3E%3Crect x=%2255%22 y=%2210%22 width=%2235%22 height=%2235%22 fill=%22%2339ff14%22/%3E%3Crect x=%2210%22 y=%2255%22 width=%2235%22 height=%2235%22 fill=%22%2339ff14%22/%3E%3Crect x=%2255%22 y=%2255%22 width=%2235%22 height=%2235%22 fill=%22%2316a34a%22/%3E%3C/svg%3E">
 <style>
-  :root { color-scheme: light; --bg:#fff; --panel:#f6f5f4; --border:#e5e7eb; --ink:#1f2937; --ink2:#4b5563; --muted:#6b7280;
-          --orange:#ea580c; --red:#dc2626; --amber:#f59e0b; }
+  :root { color-scheme: light; --bg:#fff; --panel:#f0fdf4; --border:#86efac; --ink:#14532d; --ink2:#166534; --muted:#4b6b58;
+          --orange:#15803d; --red:#16a34a; --amber:#39ff14; }  /* green theme: --orange/--red keep their names as accent slots */
+  h1, .usp { font-family: "Segoe Script", "Brush Script MT", cursive; }
+  .panel, .compare, .thumb img, .upload, .btn { border-radius: 22px; }
+  .chip { border-color: var(--amber); border-width: 2px; }
   * { box-sizing: border-box; }
   body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; }
   .wrap { max-width:1120px; margin:0 auto; padding:32px 16px 48px; }
@@ -31,7 +34,7 @@
   .note { font-size:13px; color:var(--muted); margin-top:10px; }
   .seg { display:flex; gap:6px; flex-wrap:wrap; margin:0 0 12px; }
   .seg button { border:1.5px solid var(--border); background:#fff; border-radius:999px; padding:5px 12px; font:600 13px inherit; cursor:pointer; color:var(--ink2); }
-  .seg button[aria-pressed="true"] { border-color:var(--orange); color:var(--orange); background:#fff4ec; }
+  .seg button[aria-pressed="true"] { border-color:var(--orange); color:var(--orange); background:#dcfce7; }
   .seg button:disabled { opacity:.4; cursor:not-allowed; }
   .compare { position:relative; width:100%; max-width:560px; aspect-ratio:1; margin:0 auto; border-radius:12px; overflow:hidden;
              background:#e7e5e4; touch-action:none; cursor:ew-resize; user-select:none; }
