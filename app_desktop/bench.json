@@ -1,0 +1,29 @@
+{
+  "provider": "DmlExecutionProvider",
+  "runs": [
+    {
+      "model": "live",
+      "res": "540p->1080p",
+      "ms": 370.38,
+      "fps": 3
+    },
+    {
+      "model": "live",
+      "res": "360p->720p",
+      "ms": 179.69,
+      "fps": 6
+    },
+    {
+      "model": "lite",
+      "res": "540p->1080p",
+      "ms": 343.4,
+      "fps": 3
+    },
+    {
+      "model": "lite",
+      "res": "360p->720p",
+      "ms": 190.67,
+      "fps": 5
+    }
+  ]
+}

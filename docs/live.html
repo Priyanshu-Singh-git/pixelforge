@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PixelForge Live · real-time upscaling</title>
+<meta name="description" content="Real-time 2x AI upscaling of a game window, video or webcam, running in your browser.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect x=%2210%22 y=%2210%22 width=%2235%22 height=%2235%22 fill=%22%2315803d%22/%3E%3Crect x=%2255%22 y=%2210%22 width=%2235%22 height=%2235%22 fill=%22%2339ff14%22/%3E%3Crect x=%2210%22 y=%2255%22 width=%2235%22 height=%2235%22 fill=%22%2339ff14%22/%3E%3Crect x=%2255%22 y=%2255%22 width=%2235%22 height=%2235%22 fill=%22%2316a34a%22/%3E%3C/svg%3E">
+<style>
+  :root { color-scheme: light; --bg:#fff; --panel:#f0fdf4; --border:#86efac; --ink:#14532d; --ink2:#166534; --muted:#4b6b58;
+          --accent:#15803d; --neon:#39ff14; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; }
+  .wrap { max-width:1180px; margin:0 auto; padding:28px 16px 48px; }
+  .kicker { color:#16a34a; font-weight:700; letter-spacing:.14em; font-size:13px; text-transform:uppercase; }
+  h1 { font-family:"Segoe Script","Brush Script MT",cursive; font-size:clamp(32px,5.5vw,52px); line-height:1.1; margin:6px 0 4px; }
+  h1 span { color:#16a34a; }
+  .usp { font-size:clamp(16px,2.2vw,20px); margin:0 0 18px; color:var(--ink2); }
+  a { color:var(--accent); }
+  .bar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; background:var(--panel); border:1px solid var(--border);
+         border-radius:22px; padding:12px 16px; margin-bottom:14px; }
+  .bar button, .bar select { border:1.5px solid var(--border); background:#fff; border-radius:999px; padding:7px 14px; font:600 14px inherit;
+         color:var(--ink2); cursor:pointer; }
+  .bar button[aria-pressed="true"] { border-color:var(--neon); background:#dcfce7; color:var(--ink); }
+  .bar label { font-size:13px; color:var(--muted); display:flex; gap:6px; align-items:center; }
+  .stage { position:relative; width:100%; aspect-ratio:16/9; border-radius:26px; overflow:hidden; background:#0b1a10;
+           border:3px solid var(--neon); touch-action:none; cursor:ew-resize; }
+  .stage canvas { position:absolute; inset:0; width:100%; height:100%; }
+  #cOut { clip-path: inset(0 0 0 50%); }
+  .divider { position:absolute; top:0; bottom:0; width:3px; background:#fff; left:50%; transform:translateX(-50%); pointer-events:none; }
+  .tag { position:absolute; top:12px; padding:3px 12px; border-radius:10px; font:700 13px inherit; background:rgba(255,255,255,.92); }
+  .tag.l { left:12px; } .tag.r { right:12px; color:var(--accent); }
+  .hud { display:flex; flex-wrap:wrap; gap:10px 22px; margin-top:12px; font-size:15px; }
+  .hud b { font-variant-numeric:tabular-nums; color:var(--accent); }
+  .note { font-size:13px; color:var(--muted); margin-top:14px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:18px; }
+  @media (max-width:820px) { .grid { grid-template-columns:1fr; } }
+  .panel { background:var(--panel); border:1px solid var(--border); border-radius:22px; padding:16px 18px; }
+  h2 { font-size:18px; margin:0 0 6px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { text-align:left; padding:6px 6px; border-bottom:1px solid var(--border); }
+  th { color:var(--accent); } td.n { font-variant-numeric:tabular-nums; }
+  .err { color:#b91c1c; font-weight:600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">PixelForge Engine · real-time mode</div>
+  <h1>PixelForge <span>Live</span></h1>
+  <p class="usp">Render low, see high: real-time 2× AI upscaling of a game window, video or webcam, in your browser. <a href="./">← texture engine</a></p>
+
+  <div class="bar">
+    <button data-src="demo" aria-pressed="true">Demo scene</button>
+    <button data-src="screen">Share a game window</button>
+    <button data-src="camera">Webcam</button>
+    <label class="filebtn"><button data-src="file" type="button" onclick="document.getElementById('vfile').click()">Video file</button><input id="vfile" type="file" accept="video/*" hidden></label>
+    <label>Input <select id="res"><option value="360">360p → 720p</option><option value="540">540p → 1080p</option><option value="270">270p → 540p</option></select></label>
+    <label>Model <select id="model"><option value="live">Live (GPU / WebGPU)</option><option value="lite">Lite (no GPU / mobile)</option></select></label>
+  </div>
+
+  <div class="stage" id="stage">
+    <canvas id="cBase"></canvas><canvas id="cOut"></canvas>
+    <div class="divider" id="divider"></div>
+    <span class="tag l">Plain stretch</span><span class="tag r">PixelForge Live</span>
+  </div>
+  <div class="hud">
+    <span>Upscale speed <b id="fps">–</b> fps</span>
+    <span>Per frame <b id="ms">–</b> ms</span>
+    <span>Backend <b id="backend">loading…</b></span>
+    <span id="status"></span>
+  </div>
+  <p class="note">Drag across the video to compare. "Share a game window" asks your browser for permission and works with any game running on this machine; nothing leaves your device.
+    This is a live preview next to the game, not an in-game overlay. The fps shown is how fast <i>your</i> device runs the model.</p>
+
+  <div class="grid">
+    <div class="panel">
+      <h2>Measured speed (this model, one frame)</h2>
+      <table><thead><tr><th>Device</th><th>360p → 720p</th><th>540p → 1080p</th></tr></thead><tbody id="speed"></tbody></table>
+      <p class="note" id="speedNote"></p>
+    </div>
+    <div class="panel">
+      <h2>How it works</h2>
+      <p style="margin:0">A tiny 2× network (Live: <span id="pLive"></span> parameters, Lite: <span id="pLite"></span>) trained on game textures rendered
+        at lower resolution. Every frame is grabbed, shrunk to the input resolution (as if the game rendered it there) and rebuilt at 2×.
+        Models ship as ONNX, the same files mobile and game-engine runtimes load. <a href="https://github.com/Priyanshu-Singh-git/pixelforge#realtime">Details and limits</a>.</p>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/ort.webgpu.min.js"></script>
+<script src="live.js"></script>
+</body>
+</html>

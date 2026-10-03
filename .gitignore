@@ -12,3 +12,5 @@ train/runs_all.log
 build/
 *.egg-info/
 wip/
+presentation_v2/node_modules/
+assets/figures/live_upscaled.mp4

@@ -1,0 +1,10 @@
+{
+  "model": "live",
+  "provider": "DmlExecutionProvider",
+  "frames": 240,
+  "median_ms": 19.98,
+  "fps": 50,
+  "p95_ms": 21.84,
+  "input_res": "960x540",
+  "output_res": "1920x1080"
+}

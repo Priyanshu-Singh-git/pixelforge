@@ -1,0 +1,8 @@
+# PixelForge Live desktop app (Windows). Install into your Python env:
+#   pip install -r app_desktop/requirements.txt
+#   pip install onnxruntime-directml   # GPU upscaling via DirectX (any GPU); or onnxruntime-gpu for CUDA
+dxcam
+pygame
+opencv-python
+numpy
+onnxruntime-directml
